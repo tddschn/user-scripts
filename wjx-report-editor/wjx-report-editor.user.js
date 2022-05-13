@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wjx report editor
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.1.0
 // @description  Edit your wjx.cn reports
 // @license      MIT
 // @author       tddschn
