@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Modify maxlength of textarea
+// @name         SAP AI Playground | Select GPT-4-32k Option
 // @namespace    http://tampermonkey.net/
 // @version      1.0
-// @description  Increase maxlength attribute to 800000 for textarea with CSS selector #search
+// @description  Automatically select the gpt-4-32k option for the select element with ID model
 // @author       ChatGPT
 // @match        https://ai-playground.cfapps.sap.hana.ondemand.com/index.html
 // @grant        none
@@ -12,10 +12,11 @@
 (function() {
     'use strict';
 
-    function modifyMaxLength() {
-        const textarea = document.querySelector("#search");
-        if (textarea) {
-            textarea.setAttribute("maxlength", "800000");
+    function selectGPT4Option() {
+        const selectElement = document.getElementById("model");
+        if (selectElement) {
+            selectElement.value = "gpt-4-32k";
+            selectElement.dispatchEvent(new Event('change'));
         }
     }
 
@@ -23,7 +24,7 @@
     const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
             if (mutation.type === "childList") {
-                modifyMaxLength();
+                selectGPT4Option();
             }
         });
     });
@@ -37,6 +38,6 @@
     // Start observing the document body
     observer.observe(document.body, observerConfig);
 
-    // Call the function to modify the maxlength attribute if the element is already in the DOM
-    modifyMaxLength();
+    // Call the function to select the gpt-4-32k option if the element is already in the DOM
+    selectGPT4Option();
 })();
