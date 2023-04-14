@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Trigger Button Click on Cmd/Ctrl-Enter
+// @name         SAP AI Playground | Trigger Button Click on Cmd/Ctrl-Enter
 // @namespace    http://tampermonkey.net/
 // @version      1.0
 // @description  Click the button with ID btnChat when the user presses Cmd-Enter or Ctrl-Enter
