@@ -4,7 +4,7 @@
 // @version      0.5
 // @description  Removes ?utm_source=chatgpt.com and &utm_source=chatgpt.com from all <a> tag hrefs on ChatGPT chat pages
 // @author       Your Name
-// @match        https://chatgpt.com/c/*
+// @match        https://chatgpt.com/*
 // @grant        none
 // @run-at       document-idle
 // ==/UserScript==
