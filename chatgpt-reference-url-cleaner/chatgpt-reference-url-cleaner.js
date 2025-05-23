@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         ChatGPT Reference URL Cleaner
 // @namespace    http://tampermonkey.net/
-// @version      0.4
-// @description  Removes ?utm_source=chatgpt.com and &utm_source=chatgpt.com from all <a> tag hrefs
+// @version      0.5
+// @description  Removes ?utm_source=chatgpt.com and &utm_source=chatgpt.com from all <a> tag hrefs on ChatGPT chat pages
 // @author       Your Name
-// @match        *://*/*
+// @match        https://chatgpt.com/c/*
 // @grant        none
 // @run-at       document-idle
 // ==/UserScript==
@@ -27,15 +27,12 @@
 
             if (url.searchParams.get(utmParam) === utmValue) {
                 url.searchParams.delete(utmParam);
-                // Return the modified URL. If it was originally relative and on the same domain,
-                // this might make it absolute. For link cleaning, this is usually acceptable.
-                // If precise relativity needs to be maintained, it's more complex.
+                // Return the modified URL.
                 return url.toString();
             }
         } catch (e) {
             // If URL parsing fails (e.g., mailto:, tel:, or malformed URL),
             // try a simpler string replacement as a fallback for this specific case.
-            // This is less robust but can catch some edge cases.
             if (href.includes(`${utmParam}=${utmValue}`)) {
                 let newHref = href.replace(`?${utmParam}=${utmValue}&`, '?'); // param in middle
                 newHref = newHref.replace(`&${utmParam}=${utmValue}&`, '&'); // param in middle
@@ -83,7 +80,7 @@
     }
 
     // Initial run: Process all links currently in the document body
-    // console.log('[ChatGPT Ref Cleaner] Initializing...');
+    // console.log('[ChatGPT Ref Cleaner] Initializing on ChatGPT page...');
     processNode(document.body);
 
     // Observe for future DOM changes (nodes added)
