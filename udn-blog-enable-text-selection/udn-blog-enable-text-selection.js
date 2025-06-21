@@ -1,10 +1,11 @@
 // ==UserScript==
-// @name         UDN Blog Enable Copy & Right-Click
+// @name         UDN & pixnet Blog Enable Copy & Right-Click
 // @namespace    https://github.com/your-username/
 // @version      1.0
 // @description  Re-enables text selection, copying, and right-clicking on blog.udn.com by overriding blocking scripts and styles.
 // @author       Your Name
 // @match        https://blog.udn.com/*
+// @match        https://*.pixnet.net/blog/*
 // @grant        GM_addStyle
 // @run-at       document-start
 // ==/UserScript==
