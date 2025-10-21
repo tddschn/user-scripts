@@ -16,7 +16,7 @@
     // --- Configuration ---
     const TARGET_CURRENCY = 'CNY';
     const BASE_CURRENCY = 'USD';
-    const TRANSACTION_REGEX = /^(ALP|WEIXIN)\*/;
+    const TRANSACTION_REGEX = /^(ALP|WEIXIN)(\*| )/;
     const PROCESSED_MARKER = 'data-cny-converted';
 
     /**
