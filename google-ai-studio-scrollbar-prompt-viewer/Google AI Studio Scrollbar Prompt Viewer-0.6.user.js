@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Google AI Studio Scrollbar Prompt Viewer
 // @namespace    http://tampermonkey.net/
-// @version      0.6
-// @description  Displays clickable, high-contrast prompt labels next to the scrollbar in Google's AI Studio.
+// @version      0.7
+// @description  Displays clickable, high-contrast prompt labels next to the scrollbar and adds C-j/C-k navigation.
 // @author       Your Name
 // @match        https://aistudio.google.com/app/prompts/*
 // @grant        none
@@ -13,57 +13,47 @@
     'use strict';
 
     const SCRIPT_PREFIX = 'AIPSV:';
-    let labelContainer = null; // A global reference to our container
-    let debounceTimer = null; // A timer to prevent the script from running too often
+    let labelContainer = null;
+    let debounceTimer = null;
 
-    // The main function that draws/updates everything
+    // The main function that draws/updates the visual labels
     function updateLabels() {
         const scrollbar = document.querySelector('ms-prompt-scrollbar[role="toolbar"]');
-
-        // If scrollbar disappears (e.g., navigating away), hide the labels and stop.
         if (!scrollbar) {
             if (labelContainer) labelContainer.style.display = 'none';
             return;
         }
 
-        // --- Crucial Visibility Check ---
-        // Get the scrollbar's position and size.
         const scrollbarRect = scrollbar.getBoundingClientRect();
-        // If the scrollbar has no size, it's hidden or not rendered yet. Wait for the next check.
         if (scrollbarRect.width === 0 || scrollbarRect.height === 0) {
             return;
         }
 
-        // If the container doesn't exist yet, create it.
         if (!labelContainer) {
             labelContainer = document.createElement('div');
             labelContainer.id = 'prompt-viewer-container';
             document.body.appendChild(labelContainer);
         }
 
-        // --- Positioning and Layering ---
-        // Always update position in case of window resize.
         labelContainer.style.position = 'fixed';
         labelContainer.style.top = `${scrollbarRect.top}px`;
-        labelContainer.style.left = `${scrollbarRect.right + 8}px`; // 8px gap
+        labelContainer.style.left = `${scrollbarRect.right + 8}px`;
         labelContainer.style.height = `${scrollbarRect.height}px`;
         labelContainer.style.zIndex = '99999';
-        labelContainer.style.pointerEvents = 'none'; // Container is click-through
-        labelContainer.style.display = 'block'; // Ensure it's visible
+        labelContainer.style.pointerEvents = 'none';
+        labelContainer.style.display = 'block';
 
-        // --- Update Labels ---
         const promptButtons = scrollbar.querySelectorAll('button[aria-label]');
         const existingLabels = new Map(Array.from(labelContainer.children).map(node => [node.dataset.key, node]));
         const activeKeys = new Set();
 
         promptButtons.forEach((button, index) => {
             const promptText = button.getAttribute('aria-label');
-            // Use index as a simple, reliable key
             const key = `prompt-label-${index}`;
             activeKeys.add(key);
 
             const parentItem = button.parentElement;
-            const relativeTop = parentItem.offsetTop; // Use offsetTop relative to the scrollbar itself
+            const relativeTop = parentItem.offsetTop;
 
             let label = existingLabels.get(key);
 
@@ -71,15 +61,12 @@
                 label = document.createElement('div');
                 label.dataset.key = key;
                 label.textContent = promptText;
-                label.style.pointerEvents = 'auto'; // Labels are clickable
+                label.style.pointerEvents = 'auto';
                 label.style.cursor = 'pointer';
-
-                // Add click listener when the label is created
                 label.addEventListener('click', () => button.click());
                 labelContainer.appendChild(label);
             }
 
-            // --- Styling (always applied) ---
             label.style.position = 'absolute';
             label.style.top = `${relativeTop}px`;
             label.style.whiteSpace = 'nowrap';
@@ -92,24 +79,60 @@
             label.style.fontFamily = 'Roboto, Arial, sans-serif';
             label.style.transition = 'all 0.15s ease-out';
 
-            // High-Contrast Colors
             if (button.classList.contains('ms-button-active')) {
                 label.style.fontWeight = 'bold';
-                label.style.backgroundColor = 'rgba(138, 180, 248, 1.0)'; // Bright Blue
+                label.style.backgroundColor = 'rgba(138, 180, 248, 1.0)';
                 label.style.color = '#202124';
                 label.style.transform = 'translateX(5px)';
             } else {
                 label.style.fontWeight = 'normal';
-                label.style.backgroundColor = 'rgba(0, 77, 64, 0.95)'; // Dark Teal
+                label.style.backgroundColor = 'rgba(0, 77, 64, 0.95)';
                 label.style.color = '#FFFFFF';
                 label.style.transform = 'translateX(0px)';
             }
         });
 
-        // Clean up old labels that are no longer on the scrollbar
         existingLabels.forEach((label, key) => {
             if (!activeKeys.has(key)) {
                 label.remove();
+            }
+        });
+    }
+
+    // --- NEW: Function to handle keyboard shortcuts ---
+    function setupKeyboardShortcuts() {
+        document.addEventListener('keydown', (event) => {
+            // Ignore if Ctrl is not pressed or if the key is not 'j' or 'k'
+            if (!event.ctrlKey || (event.key !== 'j' && event.key !== 'k')) {
+                return;
+            }
+
+            // Prevent the browser's default action (e.g., opening downloads)
+            event.preventDefault();
+
+            const scrollbar = document.querySelector('ms-prompt-scrollbar[role="toolbar"]');
+            if (!scrollbar) return;
+
+            // Get all prompt buttons as an array
+            const buttons = Array.from(scrollbar.querySelectorAll('button[aria-label]'));
+            if (buttons.length <= 1) return; // No need to navigate if there's only one item
+
+            // Find the index of the currently active button
+            const currentIndex = buttons.findIndex(btn => btn.classList.contains('ms-button-active'));
+
+            let nextIndex;
+
+            if (event.key === 'j') { // Go to NEXT prompt
+                // If nothing is active, the first one becomes the target. Otherwise, calculate the next.
+                nextIndex = (currentIndex === -1) ? 0 : (currentIndex + 1) % buttons.length;
+            } else { // Go to PREVIOUS prompt (event.key === 'k')
+                // If nothing is active, the last one becomes the target. Otherwise, calculate the previous.
+                nextIndex = (currentIndex === -1) ? buttons.length - 1 : (currentIndex - 1 + buttons.length) % buttons.length;
+            }
+
+            // Simulate a click on the target button
+            if (buttons[nextIndex]) {
+                buttons[nextIndex].click();
             }
         });
     }
@@ -122,20 +145,19 @@
 
     // --- Initialization Logic ---
     function init() {
-        console.log(SCRIPT_PREFIX, "Waiting for the UI to be ready...");
+        console.log(SCRIPT_PREFIX, "Prompt Viewer & Shortcuts Initialized.");
 
-        // Set up the MutationObserver to watch for all future changes
+        // Set up the keyboard listener once.
+        setupKeyboardShortcuts();
+
         const observer = new MutationObserver(debouncedUpdate);
         observer.observe(document.body, { childList: true, subtree: true, attributes: true });
 
-        // Also run on window resize
         window.addEventListener('resize', debouncedUpdate);
 
-        // Run the update function once to get started
         debouncedUpdate();
     }
 
-    // Start the whole process
     init();
 
 })();
