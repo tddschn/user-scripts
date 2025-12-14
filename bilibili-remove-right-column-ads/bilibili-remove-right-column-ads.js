@@ -4,7 +4,7 @@
 // @version      1.1
 // @description  Removes promotional cards (live streams, shows, etc.) from the rightmost column on the bilibili.com homepage feed.
 // @author       You
-// @match        https://www.bilibili.com/
+// @match        https://www.bilibili.com/*
 // @icon         https://www.bilibili.com/favicon.ico
 // @grant        none
 // @run-at       document-end
