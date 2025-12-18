@@ -5,9 +5,12 @@
 // @description  Appends the current conversation name to the page title on gemini.google.com and saves each change to history.
 // @author       Your Name
 // @match        https://gemini.google.com/app/*
+// @match        https://gemini.google.com/app/
 // @grant        none
 // @license      MIT
 // ==/UserScript==
+
+// match https://gemini.google.com/app/ for new chats
 
 (function() {
     'use strict';
