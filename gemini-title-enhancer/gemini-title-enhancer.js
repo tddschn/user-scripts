@@ -6,6 +6,7 @@
 // @author       Your Name
 // @match        https://gemini.google.com/app/*
 // @match        https://gemini.google.com/app/
+// @match        https://gemini.google.com/app
 // @grant        none
 // @license      MIT
 // ==/UserScript==
