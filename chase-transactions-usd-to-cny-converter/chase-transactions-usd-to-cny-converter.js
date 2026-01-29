@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Chase Transactions - USD to CNY Converter
 // @namespace    http://tampermonkey.net/
-// @version      2.0
+// @version      2.0.1
 // @description  Displays CNY equivalent for transactions starting with ALP* or WEIXIN* on the Chase transactions page, using historical exchange rates from the transaction date.
 // @author       Your Name
 // @match        https://secure.chase.com/web/auth/dashboard*
@@ -253,8 +253,8 @@
             return;
         }
 
-        // Filter dates that we don't have cached
-        const uncachedDates = dates.filter(d => !ratesCache[d] && !getRateForDate(d));
+        // Filter dates that we don't have a historical rate for (not in cache)
+        const uncachedDates = dates.filter(d => !ratesCache[d]);
 
         if (uncachedDates.length > 0) {
             const startDate = uncachedDates[0];

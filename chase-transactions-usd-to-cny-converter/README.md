@@ -36,6 +36,9 @@ This script uses the free [Frankfurter API](https://api.frankfurter.dev) for exc
 
 ## Changelog
 
+### v2.0.1 (2025-01-29)
+- Fixed bug where historical rates were never fetched due to incorrect cache check logic
+
 ### v2.0 (2025-01-29)
 - **Major update**: Now uses historical exchange rates from the transaction date instead of the current rate
 - Added time series API support for efficient bulk rate fetching
