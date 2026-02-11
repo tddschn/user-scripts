@@ -1,0 +1,137 @@
+https://greasyfork.org/en/scripts/562745-gemini-model-autopilot-fast-think-multilingual-manual-override
+
+---
+
+Description
+The Gemini Model Auto Changer is a productivity tool for gemini.google.com. It automates the tedious task of switching AI models manually. This script ensures that your specific "Gems" (custom AIs) always launch in "Fast" mode for quick interactions, while your standard chats automatically switch back to "Thinking Mode" for deep research and complex reasoning.
+
+
+Key Features
+Seamless Model Toggle: Automatically detects your current chat context and switches the model in the background.
+Two-Way Automation: Force "Fast" mode for specific Gem IDs and "Thinking Mode" for everything else.
+Optimized Performance: Near-instant switching (250ms delay) ensures a smooth user experience without heavy CPU usage.
+Cross-Language Support: Works perfectly with both the English and German Gemini user interfaces.
+
+How to Setup & Use
+Identify your Gem IDs: Open the custom Gem you want to use in "Fast" mode. Look at the URL in your browser's address bar. Copy the unique ID at the end (e.g., in .../app/gem/123abc456, the ID is 123abc456).
+
+Configure the Script: Open the Tampermonkey dashboard, edit this script, and paste your IDs into the FAST_GEM_IDS array at the top of the code.
+Example: const FAST_GEM_IDS = ["123abc456", "789def012"];
+
+Manual Trigger: You can also force "Fast" mode in any regular chat by simply appending #model=fast to the Gemini URL.
+
+Important Note
+This script searches for the buttons based on the text labels "Fast", "Thinking Mode", and "Thinking-Modus". If Google updates the UI text, the script may require a version update.
+
+---
+ 
+Greasy Fork
+Sign in 
+English (en)
+Scripts Forum Help More
+Info
+Code
+History
+Feedback (0)
+Stats
+Gemini Model Autopilot (Fast & Think (Multilingual & Manual Override))
+Switches between Fast and Thinking mode (DE/EN), allows manual override.
+
+Install this script?
+Ask a question, post a review, or report the script.
+Wrap lines
+// ==UserScript==
+// @name         Gemini Model Autopilot (Fast & Think (Multilingual & Manual Override))
+// @namespace    http://tampermonkey.net/
+// @version      5.2
+// @description  Switches between Fast and Thinking mode (DE/EN), allows manual override.
+// @author       Steffen
+// @match        *://gemini.google.com/*
+// @grant        none
+// @run-at       document-idle
+// @license      MIT
+// ==/UserScript==
+ 
+(function() {
+    'use strict';
+ 
+    // --- CONFIG ---
+    const FAST_GEM_IDS = [
+        "3e1ed5bc8347",
+        "ID_VON_GEM_2"
+    ];
+    // Determine which group of names we are looking for
+    // Begriffe für die Erkennung (DE und EN)
+    const LABELS_THINKING = ['Thinking-Modus', 'Thinking','Thinking mode'];
+    const LABELS_FAST = ['Fast', 'Schnell']; // Falls Google "Schnell" einführt
+    const ALL_MODELS = [...LABELS_THINKING, ...LABELS_FAST, 'Pro', 'Gemini Advanced'];
+    // --------------
+ 
+    let isProcessing = false;
+    let lastUrl = "";
+    let hasAutoSwitchedForCurrentUrl = false;
+ 
+    function autopilot() {
+        const currentURL = window.location.href;
+ 
+        if (currentURL !== lastUrl) {
+            lastUrl = currentURL;
+            hasAutoSwitchedForCurrentUrl = false;
+        }
+ 
+        if (hasAutoSwitchedForCurrentUrl || isProcessing) return;
+ 
+        const isTargetFast = FAST_GEM_IDS.some(id => currentURL.includes(id)) || currentURL.includes('model=fast');
+ 
+        const allSpans = Array.from(document.querySelectorAll('span'));
+        const currentModelSpan = allSpans.find(s =>
+            ALL_MODELS.includes(s.textContent.trim())
+        );
+ 
+        if (!currentModelSpan) return;
+ 
+        const currentModelText = currentModelSpan.textContent.trim();
+        let targetLabels = [];
+ 
+        // Terms for detection (DE and EN)
+        // Bestimme, welche Gruppe von Namen wir suchen
+        if (isTargetFast) {
+            if (LABELS_FAST.includes(currentModelText)) {
+                hasAutoSwitchedForCurrentUrl = true;
+                return;
+            }
+            targetLabels = LABELS_FAST;
+        } else {
+            if (LABELS_THINKING.includes(currentModelText)) {
+                hasAutoSwitchedForCurrentUrl = true;
+                return;
+            }
+            targetLabels = LABELS_THINKING;
+        }
+ 
+        const btn = currentModelSpan.closest('button');
+        if (btn) {
+            isProcessing = true;
+            btn.click();
+ 
+            setTimeout(() => {
+                const menuOptions = Array.from(document.querySelectorAll('span'));
+                // Search the menu for ANY of the valid labels (e.g., "Thinking mode" OR "Thinking-Modus")
+                // Suche im Menü nach IRGENDEINEM der gültigen Labels (z.B. "Thinking mode" ODER "Thinking-Modus")
+                const targetOption = menuOptions.find(s => targetLabels.includes(s.textContent.trim()));
+ 
+                if (targetOption) {
+                    const clickable = targetOption.closest('div[role="menuitem"]') || targetOption.parentElement;
+                    clickable.click();
+                    console.log(`Autopilot: Switched to ${targetOption.textContent.trim()}`);
+                }
+ 
+                hasAutoSwitchedForCurrentUrl = true;
+                setTimeout(() => { isProcessing = false; }, 1000);
+            }, 300);
+        }
+    }
+ 
+    setInterval(autopilot, 500);
+    window.addEventListener('popstate', autopilot);
+})();
