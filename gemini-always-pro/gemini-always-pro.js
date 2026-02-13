@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Gemini Always Pro (Auto Model Upgrader)
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.1
 // @description  Automatically selects the most capable Gemini model available (Pro > Thinking > Fast)
 // @author       Your Name
 // @match        *://gemini.google.com/*
@@ -105,9 +105,65 @@
         }
     }
 
-    // Run autopilot every 500ms to catch model changes
-    setInterval(autopilot, 500);
+    // Use MutationObserver to watch for DOM changes
+    const observer = new MutationObserver((mutations) => {
+        // Check if any mutation involves model-related elements
+        const hasRelevantChange = mutations.some(mutation => {
+            // Check added nodes
+            for (const node of mutation.addedNodes) {
+                if (node.nodeType === 1) { // ELEMENT_NODE
+                    const text = node.textContent;
+                    if (text && ALL_MODEL_LABELS.some(label => text.includes(label))) {
+                        return true;
+                    }
+                }
+            }
+            // Check if text content changed on spans
+            if (mutation.type === 'characterData' || mutation.type === 'childList') {
+                const target = mutation.target;
+                if (target.nodeName === 'SPAN' || target.parentElement?.nodeName === 'SPAN') {
+                    return true;
+                }
+            }
+            return false;
+        });
 
-    // Also run on navigation changes
-    window.addEventListener('popstate', autopilot);
+        if (hasRelevantChange) {
+            // Debounce: wait a bit before running autopilot
+            clearTimeout(observer.debounceTimer);
+            observer.debounceTimer = setTimeout(autopilot, 100);
+        }
+    });
+
+    // Start observing the document body for changes
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        characterData: true
+    });
+
+    // Run autopilot on URL changes (navigation)
+    const urlObserver = new MutationObserver(() => {
+        const currentUrl = window.location.href;
+        if (currentUrl !== lastUrl) {
+            lastUrl = currentUrl;
+            hasAutoSwitchedForCurrentUrl = false;
+            setTimeout(autopilot, 300);
+        }
+    });
+
+    // Watch for URL changes via history API
+    urlObserver.observe(document.querySelector('title'), {
+        childList: true,
+        subtree: true
+    });
+
+    // Also handle popstate events
+    window.addEventListener('popstate', () => {
+        hasAutoSwitchedForCurrentUrl = false;
+        setTimeout(autopilot, 300);
+    });
+
+    // Run initial autopilot
+    setTimeout(autopilot, 1000);
 })();
