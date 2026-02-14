@@ -76,6 +76,16 @@
         return Array.from(document.querySelectorAll('[role="menuitemradio"], [role="menuitem"]'));
     }
 
+    function focusTextarea() {
+        const textarea = document.querySelector('rich-textarea > div.ql-editor.ql-blank.textarea.new-input-ui');
+        if (textarea && document.activeElement !== textarea) {
+            if (textarea instanceof HTMLElement) {
+                textarea.focus();
+                console.log(`Gemini Always Pro v${SCRIPT_VERSION}: Focused textarea`);
+            }
+        }
+    }
+
     /**
      * @param {Element[]} menuItems
      * @param {HTMLButtonElement} modePickerButton
@@ -109,6 +119,8 @@
             hasAutoSwitchedForCurrentUrl = bestRank === 0;
             if (!hasAutoSwitchedForCurrentUrl) {
                 setTimeout(autopilot, 500);
+            } else {
+                setTimeout(focusTextarea, 500);
             }
         } else {
             modePickerButton.click(); // close the menu
@@ -116,6 +128,7 @@
                 console.log(`Gemini Always Pro v${SCRIPT_VERSION}: Already on best available model (${currentModelText})`);
                 hasAutoSwitchedForCurrentUrl = true;
             }
+            setTimeout(focusTextarea, 300);
         }
 
         setTimeout(() => { isProcessing = false; }, 1000);
