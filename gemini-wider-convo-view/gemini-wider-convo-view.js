@@ -15,6 +15,9 @@
     'use strict';
 
     function applyStyles() {
+        document.querySelectorAll('span.user-query-bubble-with-background').forEach(el => {
+            el.style.maxWidth = '792px';
+        });
         document.querySelectorAll('table-block > div').forEach(el => {
             el.style.maxWidth = '992px';
         });
