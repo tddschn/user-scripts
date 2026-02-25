@@ -16,7 +16,10 @@
 
     function applyStyles() {
         document.querySelectorAll('table-block > div').forEach(el => {
-            el.style.width = '992px';
+            el.style.maxWidth = '992px';
+        });
+        document.querySelectorAll('div.table-block').forEach(el => {
+            el.style.maxWidth = '992px';
         });
 
         document.querySelectorAll('div.conversation-container').forEach(el => {
