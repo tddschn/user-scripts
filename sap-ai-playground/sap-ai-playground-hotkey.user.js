@@ -8,19 +8,19 @@
 // @grant        none
 // ==/UserScript==
 
-(function() {
-    'use strict';
+(function () {
+  "use strict";
 
-    function triggerButtonClick(e) {
-        // Check if the pressed key is Enter and either Cmd or Ctrl is also pressed
-        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-            const button = document.getElementById("btnChat");
-            if (button) {
-                button.click();
-            }
-        }
+  function triggerButtonClick(e) {
+    // Check if the pressed key is Enter and either Cmd or Ctrl is also pressed
+    if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+      const button = document.getElementById("btnChat");
+      if (button) {
+        button.click();
+      }
     }
+  }
 
-    // Add the event listener to the document
-    document.addEventListener('keydown', triggerButtonClick);
+  // Add the event listener to the document
+  document.addEventListener("keydown", triggerButtonClick);
 })();

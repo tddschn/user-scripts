@@ -11,36 +11,38 @@
 // @license      MIT
 // ==/UserScript==
 
-(function() {
-    'use strict';
+(function () {
+  "use strict";
 
-    function applyStyles() {
-	    // user message box
-        document.querySelectorAll('span.user-query-bubble-with-background').forEach(el => {
-            el.style.maxWidth = '792px';
-        });
+  function applyStyles() {
+    // user message box
+    document
+      .querySelectorAll("span.user-query-bubble-with-background")
+      .forEach((el) => {
+        el.style.maxWidth = "792px";
+      });
 
-	    // response: table
-        document.querySelectorAll('table-block > div').forEach(el => {
-            el.style.maxWidth = '992px';
-        });
-	    // response: table
-        document.querySelectorAll('div.table-block').forEach(el => {
-            el.style.maxWidth = '992px';
-        });
-
-	    // response: message box
-        document.querySelectorAll('div.conversation-container').forEach(el => {
-            el.style.maxWidth = '1060px';
-        });
-    }
-
-    const observer = new MutationObserver(applyStyles);
-
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true
+    // response: table
+    document.querySelectorAll("table-block > div").forEach((el) => {
+      el.style.maxWidth = "992px";
+    });
+    // response: table
+    document.querySelectorAll("div.table-block").forEach((el) => {
+      el.style.maxWidth = "992px";
     });
 
-    applyStyles();
+    // response: message box
+    document.querySelectorAll("div.conversation-container").forEach((el) => {
+      el.style.maxWidth = "1060px";
+    });
+  }
+
+  const observer = new MutationObserver(applyStyles);
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
+
+  applyStyles();
 })();

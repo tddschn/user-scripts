@@ -9,35 +9,35 @@
 // @author       tddschn
 // ==/UserScript==
 
-(function() {
-    'use strict';
+(function () {
+  "use strict";
 
-    function selectGPT4Option() {
-        const selectElement = document.getElementById("model");
-        if (selectElement) {
-            selectElement.value = "gpt-4-32k";
-            selectElement.dispatchEvent(new Event('change'));
-        }
+  function selectGPT4Option() {
+    const selectElement = document.getElementById("model");
+    if (selectElement) {
+      selectElement.value = "gpt-4-32k";
+      selectElement.dispatchEvent(new Event("change"));
     }
+  }
 
-    // Use a MutationObserver to handle dynamic content
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.type === "childList") {
-                selectGPT4Option();
-            }
-        });
+  // Use a MutationObserver to handle dynamic content
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === "childList") {
+        selectGPT4Option();
+      }
     });
+  });
 
-    // Set up the observer configuration
-    const observerConfig = {
-        childList: true,
-        subtree: true,
-    };
+  // Set up the observer configuration
+  const observerConfig = {
+    childList: true,
+    subtree: true,
+  };
 
-    // Start observing the document body
-    observer.observe(document.body, observerConfig);
+  // Start observing the document body
+  observer.observe(document.body, observerConfig);
 
-    // Call the function to select the gpt-4-32k option if the element is already in the DOM
-    selectGPT4Option();
+  // Call the function to select the gpt-4-32k option if the element is already in the DOM
+  selectGPT4Option();
 })();

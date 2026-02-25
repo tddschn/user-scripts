@@ -29,6 +29,7 @@ A Tampermonkey/Greasemonkey userscript that displays CNY equivalents for Alipay 
 ## API
 
 This script uses the free [Frankfurter API](https://api.frankfurter.dev) for exchange rates:
+
 - No API key required
 - No usage limits
 - Rates sourced from the European Central Bank
@@ -37,9 +38,11 @@ This script uses the free [Frankfurter API](https://api.frankfurter.dev) for exc
 ## Changelog
 
 ### v2.0.1 (2025-01-29)
+
 - Fixed bug where historical rates were never fetched due to incorrect cache check logic
 
 ### v2.0 (2025-01-29)
+
 - **Major update**: Now uses historical exchange rates from the transaction date instead of the current rate
 - Added time series API support for efficient bulk rate fetching
 - Added rate caching to minimize API calls
@@ -48,5 +51,6 @@ This script uses the free [Frankfurter API](https://api.frankfurter.dev) for exc
 - Updated API endpoint from `api.frankfurter.app` to `api.frankfurter.dev`
 
 ### v1.2
+
 - Initial version with latest rate conversion
 - Basic Alipay and WeChat Pay detection

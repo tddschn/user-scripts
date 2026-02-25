@@ -8,47 +8,49 @@
 // @grant        none
 // ==/UserScript==
 
-(function() {
-    'use strict';
+(function () {
+  "use strict";
 
-    function processChildNodes(element) {
-        let textContent = '';
+  function processChildNodes(element) {
+    let textContent = "";
 
-        for (const child of element.childNodes) {
-            if (child.nodeType === Node.TEXT_NODE) {
-                textContent += child.textContent;
-            } else if (child.tagName === 'BR') {
-                textContent += '\n';
-            }
-        }
-
-        return textContent;
+    for (const child of element.childNodes) {
+      if (child.nodeType === Node.TEXT_NODE) {
+        textContent += child.textContent;
+      } else if (child.tagName === "BR") {
+        textContent += "\n";
+      }
     }
 
-    function copyToClipboard(text) {
-        const textarea = document.createElement('textarea');
-        textarea.value = text;
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
+    return textContent;
+  }
+
+  function copyToClipboard(text) {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  }
+
+  function addButton() {
+    const preElement = document.querySelector(
+      "body > div > div:nth-child(2) > div:nth-child(2) > pre",
+    );
+    if (preElement) {
+      const copyButton = document.createElement("button");
+      copyButton.textContent = "Copy";
+      copyButton.style.position = "absolute";
+      copyButton.style.zIndex = 1000;
+      copyButton.addEventListener("click", () => {
+        const preContent = processChildNodes(preElement);
+        copyToClipboard(preContent);
+      });
+
+      preElement.parentElement.insertBefore(copyButton, preElement);
     }
+  }
 
-    function addButton() {
-        const preElement = document.querySelector('body > div > div:nth-child(2) > div:nth-child(2) > pre');
-        if (preElement) {
-            const copyButton = document.createElement('button');
-            copyButton.textContent = 'Copy';
-            copyButton.style.position = 'absolute';
-            copyButton.style.zIndex = 1000;
-            copyButton.addEventListener('click', () => {
-                const preContent = processChildNodes(preElement);
-                copyToClipboard(preContent);
-            });
-
-            preElement.parentElement.insertBefore(copyButton, preElement);
-        }
-    }
-
-    addButton();
+  addButton();
 })();

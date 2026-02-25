@@ -11,4 +11,3 @@
 // @updateURL    https://github.com/tddschn/user-scripts/raw/master/wjx-report-editor/wjx-report-editor.meta.js
 // @downloadURL  https://github.com/tddschn/user-scripts/raw/master/wjx-report-editor/wjx-report-editor.user.js
 // ==/UserScript==
-

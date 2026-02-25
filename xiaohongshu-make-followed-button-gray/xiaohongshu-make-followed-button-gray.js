@@ -26,8 +26,11 @@
     // 2. Check text content
     // .textContent AUTOMATICALLY strips Vue comment markers (), so we just trim whitespace.
     const textContent = textSpan.textContent.trim();
-    const isFollowed = textContent === FOLLOWED_TEXT || textContent.includes(FOLLOWED_TEXT);
-    const isMutualFollow = textContent === MUTUAL_FOLLOW_TEXT || textContent.includes(MUTUAL_FOLLOW_TEXT);
+    const isFollowed =
+      textContent === FOLLOWED_TEXT || textContent.includes(FOLLOWED_TEXT);
+    const isMutualFollow =
+      textContent === MUTUAL_FOLLOW_TEXT ||
+      textContent.includes(MUTUAL_FOLLOW_TEXT);
 
     // 3. Apply or Remove Logic
     // We check the ACTUAL computed style or inline style, not just a dataset flag,
@@ -74,8 +77,8 @@
   observer.observe(document.body, {
     childList: true,
     subtree: true,
-    attributes: true, 
-    attributeFilter: ['class', 'style'], // Watch for style changes too
+    attributes: true,
+    attributeFilter: ["class", "style"], // Watch for style changes too
     characterData: true,
   });
 

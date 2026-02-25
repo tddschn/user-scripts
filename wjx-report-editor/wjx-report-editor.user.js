@@ -49,8 +49,8 @@ function addCountColumn() {
             questionObject,
             descText,
             choices,
-            totalCount
-          )
+            totalCount,
+          ),
         );
         // dispatch input event on newCountInput
         newCountInput.dispatchEvent(new Event("input"));
@@ -67,7 +67,7 @@ function addCountColumn() {
     questionObject,
     descText,
     choices,
-    totalCount
+    totalCount,
   ) {
     return function () {
       let newCount = newCountInput.value || "0";
@@ -171,7 +171,7 @@ function getQuestionTitle(question) {
   let dd = question.querySelector("dd");
   // get text from dd, discarding non-text nodes
   let text = Array.from(dd.childNodes).filter(
-    (node) => node.nodeType === Node.TEXT_NODE
+    (node) => node.nodeType === Node.TEXT_NODE,
   );
   // return the content of the first text node
   return text[0].textContent;

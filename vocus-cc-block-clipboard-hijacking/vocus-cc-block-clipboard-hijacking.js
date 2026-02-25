@@ -9,10 +9,14 @@
 // @run-at      document-start
 // ==/UserScript==
 
-(function() {
-    'use strict';
+(function () {
+  "use strict";
 
-    document.addEventListener('copy', function(e) {
-        e.stopImmediatePropagation();
-    }, true);
+  document.addEventListener(
+    "copy",
+    function (e) {
+      e.stopImmediatePropagation();
+    },
+    true,
+  );
 })();

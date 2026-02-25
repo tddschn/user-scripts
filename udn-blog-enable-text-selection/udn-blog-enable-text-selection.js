@@ -10,31 +10,35 @@
 // @run-at       document-start
 // ==/UserScript==
 
-(function() {
-    'use strict';
+(function () {
+  "use strict";
 
-    // --- Part 1: Defeat JavaScript Event Blockers ---
-    // The site uses `return false` on `contextmenu` and `selectstart` events
-    // to prevent right-clicking and text selection.
-    //
-    // By running this script at `@run-at document-start`, we can add our own
-    // listeners before the page's scripts execute.
-    // We listen during the "capture" phase, which runs before the default "bubble"
-    // phase. `e.stopImmediatePropagation()` then prevents any other listeners
-    // for the same event (including the site's blocking ones) from running.
-    const eventsToAllow = ['contextmenu', 'selectstart'];
+  // --- Part 1: Defeat JavaScript Event Blockers ---
+  // The site uses `return false` on `contextmenu` and `selectstart` events
+  // to prevent right-clicking and text selection.
+  //
+  // By running this script at `@run-at document-start`, we can add our own
+  // listeners before the page's scripts execute.
+  // We listen during the "capture" phase, which runs before the default "bubble"
+  // phase. `e.stopImmediatePropagation()` then prevents any other listeners
+  // for the same event (including the site's blocking ones) from running.
+  const eventsToAllow = ["contextmenu", "selectstart"];
 
-    eventsToAllow.forEach(eventName => {
-        window.addEventListener(eventName, function(e) {
-            e.stopImmediatePropagation();
-        }, { capture: true });
-    });
+  eventsToAllow.forEach((eventName) => {
+    window.addEventListener(
+      eventName,
+      function (e) {
+        e.stopImmediatePropagation();
+      },
+      { capture: true },
+    );
+  });
 
-    // --- Part 2: Defeat CSS Blockers ---
-    // As a fallback and for good measure, we inject CSS to override any
-    // `user-select: none` styles, which also prevent text selection.
-    // The `!important` flag ensures our rule takes precedence.
-    GM_addStyle(`
+  // --- Part 2: Defeat CSS Blockers ---
+  // As a fallback and for good measure, we inject CSS to override any
+  // `user-select: none` styles, which also prevent text selection.
+  // The `!important` flag ensures our rule takes precedence.
+  GM_addStyle(`
         *, body, body * {
             -webkit-user-select: auto !important;
             -moz-user-select: auto !important;

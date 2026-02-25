@@ -9,34 +9,34 @@
 // @author       tddschn
 // ==/UserScript==
 
-(function() {
-    'use strict';
+(function () {
+  "use strict";
 
-    function modifyMaxLength() {
-        const textarea = document.querySelector("#search");
-        if (textarea) {
-            textarea.setAttribute("maxlength", "800000");
-        }
+  function modifyMaxLength() {
+    const textarea = document.querySelector("#search");
+    if (textarea) {
+      textarea.setAttribute("maxlength", "800000");
     }
+  }
 
-    // Use a MutationObserver to handle dynamic content
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.type === "childList") {
-                modifyMaxLength();
-            }
-        });
+  // Use a MutationObserver to handle dynamic content
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === "childList") {
+        modifyMaxLength();
+      }
     });
+  });
 
-    // Set up the observer configuration
-    const observerConfig = {
-        childList: true,
-        subtree: true,
-    };
+  // Set up the observer configuration
+  const observerConfig = {
+    childList: true,
+    subtree: true,
+  };
 
-    // Start observing the document body
-    observer.observe(document.body, observerConfig);
+  // Start observing the document body
+  observer.observe(document.body, observerConfig);
 
-    // Call the function to modify the maxlength attribute if the element is already in the DOM
-    modifyMaxLength();
+  // Call the function to modify the maxlength attribute if the element is already in the DOM
+  modifyMaxLength();
 })();

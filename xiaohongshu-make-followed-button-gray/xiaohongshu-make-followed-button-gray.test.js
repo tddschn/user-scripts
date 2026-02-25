@@ -119,7 +119,7 @@ function createMockDOM() {
 
         // Check if content contains nested spans
         const content = match[1];
-        if (content.includes('<span')) {
+        if (content.includes("<span")) {
           // Parse nested structure
           span.parseHTML(content);
         } else {
@@ -267,7 +267,9 @@ function createUserScriptLogic(document, MutationObserver) {
     for (const rule of rules) {
       const [prop, val] = rule.split(":").map((s) => s.trim());
       if (prop && val) {
-        const camelProp = prop.replace(/-([a-z])/g, (m, p1) => p1.toUpperCase());
+        const camelProp = prop.replace(/-([a-z])/g, (m, p1) =>
+          p1.toUpperCase(),
+        );
         button._styles[camelProp] = val.replace(/ !important/g, "");
       }
     }
@@ -821,7 +823,8 @@ describe("Real-world HTML patterns", () => {
 
   it("should match the exact structure from the issue", () => {
     const button = new dom.MockElement("button");
-    button.className = "reds-button-new follow-button large primary follow-button";
+    button.className =
+      "reds-button-new follow-button large primary follow-button";
 
     const boxSpan = new dom.MockElement("span");
     boxSpan.classList.add("reds-button-new-box");
@@ -840,7 +843,8 @@ describe("Real-world HTML patterns", () => {
 
   it("should match Vue rendered structure with comment markers", () => {
     const button = new dom.MockElement("button");
-    button.className = "reds-button-new follow-button large primary follow-button";
+    button.className =
+      "reds-button-new follow-button large primary follow-button";
 
     // Build DOM structure directly to simulate Vue rendered HTML:
     // <span class="reds-button-new-box"><!----><!--[--><!--]--><span class="reds-button-new-text"><!--[-->已关注<!--]--></span></span>

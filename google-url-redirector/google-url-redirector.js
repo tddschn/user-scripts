@@ -197,13 +197,13 @@
 // @run-at       document-start
 // ==/UserScript==
 
-(function() {
-    'use strict';
+(function () {
+  "use strict";
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const redirectUrl = urlParams.get('q');
+  const urlParams = new URLSearchParams(window.location.search);
+  const redirectUrl = urlParams.get("q");
 
-    if (redirectUrl) {
-        window.location.replace(redirectUrl);
-    }
+  if (redirectUrl) {
+    window.location.replace(redirectUrl);
+  }
 })();
