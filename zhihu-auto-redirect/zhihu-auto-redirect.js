@@ -5,6 +5,7 @@
 // @description  Automatically redirects from the Zhihu link warning page (link.zhihu.com) to the target URL.
 // @author       Gemini
 // @match        https://link.zhihu.com/*
+// @match        https://link.juejin.cn/*
 // @grant        none
 // @run-at       document-start
 // ==/UserScript==
