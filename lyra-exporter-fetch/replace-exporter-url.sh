@@ -7,4 +7,4 @@
 fastmod -m \
     "(EXPORTER_(?:URL|ORIGIN):) 'https://yalums\.github\.io(?:-exporter/)?'" \
     '${1} '"'http://localhost:10985/'" \
-    "${1}"
+    "${@}"
