@@ -8,6 +8,6 @@ extract-header:
 	<Lyra-Exporter-Fetch-One-Click-AI-Chat-Backup.user.js extract_text_by_markers.py -e '// ==/UserScript==' >userscript-header.js
 
 create-frozen-user-js:
-	userscript_disable_autoupdate.py Lyra-Exporter-Fetch-One-Click-AI-Chat-Backup.user.js -o frozen.user.js
+	userscript_update_freezer.py Lyra-Exporter-Fetch-One-Click-AI-Chat-Backup.user.js -o frozen.user.js
 
 .PHONY: download-from-greasyfork download-header extract-header create-frozen-user-js
