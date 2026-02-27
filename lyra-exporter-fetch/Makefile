@@ -10,4 +10,7 @@ extract-header:
 create-frozen-user-js:
 	userscript_update_freezer.py Lyra-Exporter-Fetch-One-Click-AI-Chat-Backup.user.js -o frozen.user.js
 
+replace-exporter-url:
+	./replace-exporter-url.sh frozen.user.js
+
 .PHONY: download-from-greasyfork download-header extract-header create-frozen-user-js
