@@ -93,8 +93,8 @@
             CANVAS_SWITCH_ID: 'lyra-canvas-switch',
             WORKSPACE_TYPE_ID: 'lyra-workspace-type',
             MANUAL_ID_BTN: 'lyra-manual-id-btn',
-            EXPORTER_URL: 'https://yalums.github.io/lyra-exporter/',
-            EXPORTER_ORIGIN: 'https://yalums.github.io',
+            EXPORTER_URL: 'http://localhost:10985/',
+            EXPORTER_ORIGIN: 'http://localhost:10985',
             TIMING: {
                 SCROLL_DELAY: 250,
                 SCROLL_TOP_WAIT: 1000,
